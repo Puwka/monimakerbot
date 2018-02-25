@@ -2,3 +2,4 @@
 *.txt
 yarn.lock
 *.DS_Store
+/localData/
