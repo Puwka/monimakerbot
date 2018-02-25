@@ -1,2 +1,4 @@
 /node_modules/
 *.txt
+yarn.lock
+*.DS_Store

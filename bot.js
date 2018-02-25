@@ -2,6 +2,8 @@ const axios = require('axios')
 const fs= require('fs')
 
 let vp = 'epy_btc'
+console.log("Bot started")
+console.log("To stop bot press 'CTRL+C'")
 
 setInterval(() => {
   axios.get(`https://yobit.net/api/3/trades/${vp}`)
