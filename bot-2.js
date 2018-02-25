@@ -8,7 +8,7 @@ const localData = require('./localData/localData')
 
 const key = localData.getKey()
 const secret = localData.getSecret()
-const payload = {'nonce': 129}
+const payload = {'nonce': 132}
 
 function hmacPayload (secret, payload) {
   const string = Object.keys(payload)
@@ -23,17 +23,7 @@ function hmacPayload (secret, payload) {
 var hmac = hmacPayload(secret, payload)
 console.log(hmac)
 
-axios({
-  method: 'post',
-  url: `https://yobit.net/tapi/`,
-  headers: {
-    'Key': key,
-    'Sign': hmac,
-    "Content-type": "application/x-www-form-urlencoded",
-  },
-  data: {
-    nonce: 129,
-    method: 'getInfo'
-  }
-}).then(res => console.log(res))
+axios.defaults.headers.common['Key'] = key
+axios.defaults.headers.common['Sign'] = hmac
+axios.post('https://yobit.net/tapi/?getInfo&nonce=132').then(res => console.log(res))
 .catch(e => console.log(e))
