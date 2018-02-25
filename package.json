@@ -9,6 +9,7 @@
   "author": "puwka",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.18.0"
+    "axios": "^0.18.0",
+    "moment": "^2.20.1"
   }
 }
