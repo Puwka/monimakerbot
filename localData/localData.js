@@ -1,13 +1,9 @@
 const key = '123'
 const secret = '321'
 
-let getKey = () => {
-  return key
-}
+let getKey = () => key
 
-let getSecret = () => {
-  return secret
-}
+let getSecret = () => secret
 
 module.exports = {
   getKey,
