@@ -1,11 +1,11 @@
 // 3rd party
-// const axios = require('axios')
+const request = require('request');
 // node.js pack
 const crypto = require("crypto");
 //project modules
 const localData = require('./local/data')
 // const moment = require("moment");
-const request = require('request');
+
 
 
 const key = localData.getKey()
@@ -29,21 +29,46 @@ function hmacPayload (secret, params) {
 var sign = hmacPayload(secret, payload)
 
 var url = 'https://yobit.io/tapi/';
-var headers = { 
+var headers = {
     'Content-Type' : 'application/x-www-form-urlencoded',
     'Key': key,
     'Sign' : sign
 };
 
-request.post({ url: url, form: payload, headers: headers }, function (e, r, body) {
-  nonce = nonce + 1
-  localData.setNonce(nonce)
-  console.log(body)
-});
+let info = () => {
+  return new Promise((resolve, reject) => {
+    request.post({ url: url, form: payload, headers: headers }, (e, r, body) => {
+        nonce = nonce + 1
+        localData.setNonce(nonce)
+        if(e) {
+          reject('wrong link')
+        }
+        resolve(body)
+      })
+  }).then(res => {
+    return new Promise((resolve, reject) => {
+      if(res) {
+        resolve('gotcha')
+      }
+      reject('huy')
+    }).then(res => console.log(res))
+  }).catch(e => console.log(e))
+}
 
-// 
-// axios.defaults.headers.common['Key'] = key
-// axios.defaults.headers.common['Sign'] = sign
-// axios.post('https://yobit.io/tapi/', payload)
-// .then(res => console.log(res))
+info()
+
+// axios.post('https://yobit.io/tapi/', payload, {
+//   headers: {
+//     'Key': key,
+//     'Sign': sign
+//   }
+// })
+// .then(response => {
+//   console.log(response.data);
+//     console.log(response.status);
+//     console.log(response.headers);
+//     console.log(response.config);
+//   nonce += 1
+//   localData.setNonce(nonce)
+// })
 // .catch(e => console.log(e))
