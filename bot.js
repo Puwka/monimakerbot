@@ -8,7 +8,7 @@ let crypto = bringMeValue.value((crypto) => {
   console.log(`Your pair is: ${vp}`)
 
   setInterval(() => {
-    axios.get(`https://yobit.net/api/3/depth/${vp}?limit=12`)
+    axios.get(`https://yobit.net/api/3/depth/${vp}?limit=6`)
     .then(response => {
       if (!fs.existsSync(`./${vp}_depth.txt`)) {
         fs.writeFile(`${vp}_depth.txt`, `${JSON.stringify(response.data)}` + `\n\n`, e => {
