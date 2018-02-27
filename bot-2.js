@@ -11,8 +11,8 @@ const localData = require('./local/data')
 const key = localData.getKey()
 const secret = localData.getSecret()
 let nonce = localData.getNonce()
+const url = 'https://yobit.io/tapi/';
 
-const payload = {nonce: nonce, method: 'getInfo'}
 
 function hmacPayload (secret, params) {
   var data = []
@@ -26,31 +26,39 @@ function hmacPayload (secret, params) {
   return(hash.digest('hex'))
 }
 
-var sign = hmacPayload(secret, payload)
+let getPayload = (payload) => {
+  let sign = hmacPayload(secret, payload)
+  let headers = {
+      'Content-Type' : 'application/x-www-form-urlencoded',
+      'Key': key,
+      'Sign' : sign
+  };
+  return headers
+}
 
-var url = 'https://yobit.io/tapi/';
-var headers = {
-    'Content-Type' : 'application/x-www-form-urlencoded',
-    'Key': key,
-    'Sign' : sign
-};
 
 let info = () => {
   return new Promise((resolve, reject) => {
-    request.post({ url: url, form: payload, headers: headers }, (e, r, body) => {
+    const payload = {nonce, method: 'getInfo'}
+    let headers = getPayload(payload)
+    request.post({ url, form: payload, headers }, (e, r, body) => {
         nonce = nonce + 1
-        localData.setNonce(nonce)
         if(e) {
-          reject('wrong link')
+          reject(`First request covered with shit: ${e}`)
         }
         resolve(body)
       })
   }).then(res => {
+    console.log(res)
+    const payload = {nonce, method: 'ActiveOrders', pair: 'ltc_btc'}
+    let headers = getPayload(payload)
     return new Promise((resolve, reject) => {
-      if(res) {
-        resolve('gotcha')
-      }
-      reject('huy')
+      request.post({url, form: payload, headers}, (e, r, body) => {
+      nonce = nonce + 1
+      localData.setNonce(nonce)
+      if(e) reject(`Second request covered with shit: ${e}`)
+      resolve(body)
+      })
     }).then(res => console.log(res))
   }).catch(e => console.log(e))
 }
