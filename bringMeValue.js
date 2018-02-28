@@ -12,6 +12,17 @@ let value = (callback) => {
   })
 }
 
+let valueB2 = () => {
+  return new Promise((resolve, reject) => {
+    rl.question('Enter crypto: ', answer =>  {
+    console.log(`Your crypto is: ${answer}`)
+    resolve(answer)
+  })
+
+  })
+}
+
 module.exports = {
-  value
+  value,
+  valueB2
 }
