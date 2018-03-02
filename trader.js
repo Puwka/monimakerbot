@@ -52,7 +52,7 @@ let info = () => {
           let low = parsedRes[`${res.crypto}_btc`].low
           low < 0.000001 ? low = 0.000001 : low = low
           let rate = low * 3
-          let amount = (balance \ 2) * rate
+          let amount = (balance / 2) / rate
           const payload = {nonce, method: 'Trade', pair: `${res.crypto}_btc`, type: 'buy', amount, rate}
           const headers = getPayload(payload)
           request.post({url, headers, form: payload}, (e, r, body) => {
