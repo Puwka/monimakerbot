@@ -48,11 +48,11 @@ let info = () => {
       }).then(res => {
         return new Promise((resolve, reject) => {
           const parsedRes = JSON.parse(res.body)
-          const balance = 0.00033
+          const balance = 0.00025
           let low = parsedRes[`${res.crypto}_btc`].low
           low < 0.000001 ? low = 0.000001 : low = low
-          let rate = low * 3
-          let amount = (balance / 2) / rate
+          let rate = low * 1.4
+          let amount = Math.floor(balance/rate)
           const payload = {nonce, method: 'Trade', pair: `${res.crypto}_btc`, type: 'buy', amount, rate}
           const headers = getPayload(payload)
           request.post({url, headers, form: payload}, (e, r, body) => {
